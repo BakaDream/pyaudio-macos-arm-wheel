@@ -24,12 +24,12 @@ jobs:
         with:
           pixi-version: v0.49.0
           cache: false
-          run-install: true
-          environments: dev
-          activate-environment: dev
+          run-install: false
+          # environments: dev
+          # activate-environment: dev
       - name: Create and configure pixi environment
         run: |
-          cd pyaudio-build
+          pixi init
           # 明确指定Python版本，使用矩阵变量
           pixi add python=${{ matrix.python-version }}
           pixi add portaudio
@@ -39,12 +39,10 @@ jobs:
       - name: Build wheel
         run: |
           # 确保正确引用PyAudio源代码目录
-          cd pyaudio-build
           pixi run pip wheel $GITHUB_WORKSPACE -w dist
 
       - name: Delocate wheel
         run: |
-          cd pyaudio-build
           mkdir -p wheelhouse
           pixi run delocate-wheel -w wheelhouse dist/*.whl
 
@@ -52,5 +50,5 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: pyaudio-wheels-py${{ matrix.python-version }}
-          path: pyaudio-build/wheelhouse/*.whl
+          path: wheelhouse/*.whl
           if-no-files-found: error  # 如果没有生成文件则报错
