@@ -5,9 +5,13 @@ on:
   push:
     branches:
       - main
+
 jobs:
   build:
     runs-on: macos-14
+    strategy:
+      matrix:
+        python-version: ["3.11", "3.12"]  # 更清晰的命名
 
     steps:
       - name: Checkout PyAudio
@@ -16,22 +20,28 @@ jobs:
           repository: CristiFati/pyaudio
 
       - name: Setup Pixi
-        uses: prefix-dev/setup-pixi@v0.8.1
+        uses: prefix-dev/setup-pixi@v0.9.0
         with:
-          pixi-version: v0.27.0
-
-      - name: Install dependencies with Pixi
+          pixi-version: v0.49.0
+          cache: true
+          auth-host: prefix.dev
+          auth-token: ${{ secrets.PREFIX_DEV_TOKEN }}
+      
+      - name: Create and configure pixi environment
         run: |
           pixi init --non-interactive pyaudio-build
           cd pyaudio-build
-          pixi add python pip
+          # 明确指定Python版本，使用矩阵变量
+          pixi add python=${{ matrix.python-version }}
           pixi add portaudio
           pixi add delocate
+          pixi add pip  # 确保pip在环境中可用
 
       - name: Build wheel
         run: |
+          # 确保正确引用PyAudio源代码目录
           cd pyaudio-build
-          pixi run pip wheel .. -w dist
+          pixi run pip wheel $GITHUB_WORKSPACE -w dist
 
       - name: Delocate wheel
         run: |
@@ -42,5 +52,6 @@ jobs:
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: pyaudio-wheels
+          name: pyaudio-wheels-py${{ matrix.python-version }}
           path: pyaudio-build/wheelhouse/*.whl
+          if-no-files-found: error  # 如果没有生成文件则报错
