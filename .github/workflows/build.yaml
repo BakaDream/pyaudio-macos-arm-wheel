@@ -24,7 +24,7 @@ jobs:
         with:
           pixi-version: v0.49.0
           cache: false
-          run-install: false
+          run-install: true
           environments: dev
           activate-environment: dev
       - name: Create and configure pixi environment
