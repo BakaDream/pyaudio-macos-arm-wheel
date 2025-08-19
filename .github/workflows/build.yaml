@@ -24,7 +24,7 @@ jobs:
         with:
           pixi-version: v0.49.0
           cache: false
-      
+          run-install: false
       - name: Create and configure pixi environment
         run: |
           pixi init --non-interactive pyaudio-build
