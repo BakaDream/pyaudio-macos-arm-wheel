@@ -23,7 +23,7 @@ jobs:
         uses: prefix-dev/setup-pixi@v0.9.0
         with:
           pixi-version: v0.49.0
-          cache: true
+          cache: false
       
       - name: Create and configure pixi environment
         run: |
