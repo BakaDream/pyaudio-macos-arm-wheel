@@ -1,0 +1,12 @@
+[workspace]
+authors = ["BakaDream <2507457629@qq.com>"]
+channels = ["conda-forge"]
+name = "audio-build"
+platforms = ["osx-arm64"]
+version = "0.1.0"
+
+[tasks]
+
+[dependencies]
+portaudio = ">=19.7.0,<20"
+delocate = ">=0.13.0,<0.14"

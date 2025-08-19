@@ -14,10 +14,11 @@ jobs:
         python-version: ["3.11", "3.12"]  # 更清晰的命名
 
     steps:
-      - name: Checkout PyAudio
+      - name: Checkout self
         uses: actions/checkout@v4
         with:
-          repository: CristiFati/pyaudio
+          repository: BakaDream/pyaudio-macos-arm-wheel
+    
 
       - name: Setup Pixi
         uses: prefix-dev/setup-pixi@v0.9.0
@@ -25,16 +26,20 @@ jobs:
           pixi-version: v0.49.0
           cache: false
           run-install: false
-          # environments: dev
-          # activate-environment: dev
+          environments: audio-build
+          activate-environment: audio-build
       - name: Create and configure pixi environment
         run: |
-          pixi init
           # 明确指定Python版本，使用矩阵变量
           pixi add python=${{ matrix.python-version }}
           pixi add portaudio
           pixi add delocate
-          pixi add pip  # 确保pip在环境中可用
+          pixi add pip  # 确保pip在环境中可
+
+      - name: Checkout PyAudio
+        uses: actions/checkout@v4
+        with:
+          repository: CristiFati/pyaudio
 
       - name: Build wheel
         run: |
