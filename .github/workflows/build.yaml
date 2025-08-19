@@ -25,9 +25,10 @@ jobs:
           pixi-version: v0.49.0
           cache: false
           run-install: false
+          environments: dev
+          activate-environment: dev
       - name: Create and configure pixi environment
         run: |
-          pixi init --non-interactive pyaudio-build
           cd pyaudio-build
           # 明确指定Python版本，使用矩阵变量
           pixi add python=${{ matrix.python-version }}
