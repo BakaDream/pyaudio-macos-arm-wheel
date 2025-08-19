@@ -1,0 +1,46 @@
+name: Build PyAudio Wheel
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+jobs:
+  build:
+    runs-on: macos-14
+
+    steps:
+      - name: Checkout PyAudio
+        uses: actions/checkout@v4
+        with:
+          repository: CristiFati/pyaudio
+
+      - name: Setup Pixi
+        uses: prefix-dev/setup-pixi@v0.8.1
+        with:
+          pixi-version: v0.27.0
+
+      - name: Install dependencies with Pixi
+        run: |
+          pixi init --non-interactive pyaudio-build
+          cd pyaudio-build
+          pixi add python pip
+          pixi add portaudio
+          pixi add delocate
+
+      - name: Build wheel
+        run: |
+          cd pyaudio-build
+          pixi run pip wheel .. -w dist
+
+      - name: Delocate wheel
+        run: |
+          cd pyaudio-build
+          mkdir -p wheelhouse
+          pixi run delocate-wheel -w wheelhouse dist/*.whl
+
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: pyaudio-wheels
+          path: pyaudio-build/wheelhouse/*.whl
