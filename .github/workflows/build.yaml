@@ -24,7 +24,6 @@ jobs:
         with:
           pixi-version: v0.49.0
           cache: true
-          auth-host: prefix.dev
       
       - name: Create and configure pixi environment
         run: |
