@@ -25,7 +25,6 @@ jobs:
           pixi-version: v0.49.0
           cache: true
           auth-host: prefix.dev
-          auth-token: ${{ secrets.PREFIX_DEV_TOKEN }}
       
       - name: Create and configure pixi environment
         run: |
