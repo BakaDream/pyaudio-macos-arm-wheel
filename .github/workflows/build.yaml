@@ -25,7 +25,7 @@ jobs:
         with:
           pixi-version: v0.49.0
           cache: false
-          run-install: false
+          run-install: true
           environments: audio-build
           activate-environment: audio-build
       - name: Create and configure pixi environment
