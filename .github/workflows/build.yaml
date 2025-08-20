@@ -35,7 +35,7 @@ jobs:
           python = "${{ matrix.python-version }}"
           portaudio = ">=19.7.0,<20"
           delocate = ">=0.13.0,<0.14"
-          pip
+          pip = "*"
           EOF
 
       - name: Setup Pixi
