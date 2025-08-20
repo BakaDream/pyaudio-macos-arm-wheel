@@ -11,7 +11,7 @@ jobs:
     runs-on: macos-14
     strategy:
       matrix:
-        python-version: ["3.11", "3.12"]
+        python-version: ["3.8","3.9", "3.10", "3.11", "3.12", "3.13"]
 
     steps:
       - name: Checkout PyAudio
@@ -70,3 +70,8 @@ jobs:
           name: pyaudio-wheels-py${{ matrix.python-version }}
           path: wheelhouse/*.whl
           if-no-files-found: error
+
+      - name: Upload Release Asset
+        uses: softprops/action-gh-release@v2
+        with:
+          files: wheelhouse/*.whl
