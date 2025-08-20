@@ -46,7 +46,7 @@ jobs:
         with:
           pixi-version: v0.49.0
           cache: false
-          run-install: true  # 先不运行安装，我们将手动配置
+          run-install: true 
           environments: default
           activate-environment: default
 
@@ -78,3 +78,34 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           files: wheelhouse/*.whl
+  test:
+    needs: build
+    runs-on: macos-14
+    strategy:
+      matrix:
+        python-version: ["3.9", "3.10", "3.11", "3.12", "3.13"]
+
+    steps:
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Download wheel artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: pyaudio-wheels-py${{ matrix.python-version }}
+          path: wheelhouse
+
+      - name: Install wheel
+        run: |
+          pip install wheelhouse/*.whl
+
+      - name: Test PyAudio
+        run: |
+          python - <<'EOF'
+          import pyaudio
+          p = pyaudio.PyAudio()
+          print("PyAudio initialized successfully!", p)
+          p.terminate()
+          EOF
