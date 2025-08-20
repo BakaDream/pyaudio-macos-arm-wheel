@@ -51,7 +51,7 @@ jobs:
       - name: Build wheel
         run: |
           # 明确使用指定环境运行pip
-          pixi run --env default pip wheel $GITHUB_WORKSPACE -w dist
+          pixi run pip wheel $GITHUB_WORKSPACE -w dist
           
           # 检查生成的wheel文件
           ls -la dist/
@@ -59,7 +59,7 @@ jobs:
       - name: Delocate wheel
         run: |
           mkdir -p wheelhouse
-          pixi run --env audio-build delocate-wheel -w wheelhouse dist/*.whl
+          pixi run delocate-wheel -w wheelhouse dist/*.whl
           
           # 检查处理后的wheel文件
           ls -la wheelhouse/
