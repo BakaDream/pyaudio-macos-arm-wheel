@@ -11,7 +11,7 @@ jobs:
     runs-on: macos-14
     strategy:
       matrix:
-        python-version: ["3.9.*", "3.10.*", "3.11.*", "3.12.*", "3.13.*"]
+        python-version: ["3.9", "3.10", "3.11", "3.12", "3.13"]
 
     steps:
       - name: Checkout PyAudio
@@ -32,7 +32,7 @@ jobs:
           [tasks]
 
           [dependencies]
-          python = "${{ matrix.python-version }}"
+          python = "${{ matrix.python-version }}.*"
           portaudio = ">=19.7.0,<20"
           delocate = ">=0.13.0,<0.14"
           pip = "*"
